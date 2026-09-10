@@ -32,7 +32,6 @@ bash <(curl -sL https://raw.githubusercontent.com/guruzgh-ed/guruz/master/aio.sh
 • XRAYS Vless TLS           : 443
 • XRAYS Vless None TLS      : 80
 • XRAYS Vless GRPC TLS      : 443
-
 ```
 ### Other Features
 ```

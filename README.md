@@ -1,4 +1,4 @@
-# Multi Script
+# Multi Script (Single IP)
 
 #### Installation
 ```

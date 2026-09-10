@@ -7,11 +7,6 @@ bash <(curl -sL https://raw.githubusercontent.com/guruzgh-ed/guruz/master/aio.sh
 ```
            
 ----
-
-# Special INFO SlowDNS
-• SSH Over DNS (SlowDNS)
-* the speed is limited
-* download speed 4 Mbps (Max Speed)
   
 ### Os Supported
 ```
@@ -40,6 +35,7 @@ bash <(curl -sL https://raw.githubusercontent.com/guruzgh-ed/guruz/master/aio.sh
 
 ```
 ### Server Information & Other Features
+```
 • Timezone                : Africa/Accra (GMT)
 • IPtables                : [ON]
 • Auto-Reboot             : [OFF]

@@ -14,7 +14,8 @@ bash <(curl -sL https://raw.githubusercontent.com/guruzgh-ed/guruz/master/aio.sh
 • Ubuntu 22. 04 Recommended
 • Ubuntu 24.04
 • Ubuntu 20.04
----
+
+```
 #### Service & Port
 ```
 • SlowDNS                   : 53

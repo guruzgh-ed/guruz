@@ -1,5 +1,4 @@
 # Multi Script
-<br>
 
 #### Installation
 ```
@@ -40,7 +39,5 @@ bash <(curl -sL https://raw.githubusercontent.com/guruzgh-ed/guruz/master/aio.sh
 • IPtables                : [ON]
 • Auto-Reboot             : [OFF]
 • IPv6                    : [OFF]
-• Auto Delete Expired Account
-• Auto Fix
 ```
 Bash script by Eddme23 & Guruz GH

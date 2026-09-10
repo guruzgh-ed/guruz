@@ -14,7 +14,6 @@ bash <(curl -sL https://raw.githubusercontent.com/guruzgh-ed/guruz/master/aio.sh
 • Ubuntu 22. 04 Recommended
 • Ubuntu 24.04
 • Ubuntu 20.04
-
 ```
 #### Service & Port
 ```
@@ -35,7 +34,7 @@ bash <(curl -sL https://raw.githubusercontent.com/guruzgh-ed/guruz/master/aio.sh
 • XRAYS Vless GRPC TLS      : 443
 
 ```
-### Server Information & Other Features
+### Other Features
 ```
 • Timezone                : Africa/Accra (GMT)
 • IPtables                : [ON]

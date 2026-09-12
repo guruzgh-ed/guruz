@@ -1528,8 +1528,6 @@ EOF_OVPN_EXP
 chmod 644 /etc/cron.d/openvpn-expiry
 
 systemctl daemon-reload
-# A re-run over the old shared-Stunnel layout needs one SSH Stunnel restart to
-# release 8433. After this migration, OpenVPN restarts never touch SSH Stunnel.
 if [ "$OPENVPN_STUNNEL_WAS_SHARED" -eq 1 ]; then
   systemctl restart "$STUNNEL_SERVICE"
 fi
@@ -2623,15 +2621,34 @@ root hard nofile 1048576
 LIMITS
 
 # SLOWDNS
-rm -rf /etc/slowdns; mkdir -m 777 /etc/slowdns
+rm -rf /etc/slowdns
+install -d -m 700 /etc/slowdns
 cat > /etc/slowdns/server.key << END
 $Serverkey
 END
 cat > /etc/slowdns/server.pub << END
 $Serverpub
 END
-wget -q -O /etc/slowdns/sldns-server "https://raw.githubusercontent.com/fisabiliyusri/SLDNS/main/slowdns/sldns-server"
-chmod +x /etc/slowdns/server.key /etc/slowdns/server.pub /etc/slowdns/sldns-server
+chmod 600 /etc/slowdns/server.key
+chmod 644 /etc/slowdns/server.pub
+
+# Pin the approved SlowDNS binary and reject changed/corrupt downloads.
+SLOWDNS_COMMIT="b667b0d15be0589cd89cd2f997873296ceb07ce2"
+SLOWDNS_SHA256="ffb4d459fe9a028f7ff4b49c4c88f2f3c5f1f78ac964fb8ca57e2dfaeb457add"
+SLOWDNS_DOWNLOAD="$(mktemp /tmp/sldns-server.XXXXXX)" || exit 1
+if ! wget --https-only --tries=3 --timeout=30 -O "$SLOWDNS_DOWNLOAD" \
+    "https://raw.githubusercontent.com/fisabiliyusri/SLDNS/${SLOWDNS_COMMIT}/slowdns/sldns-server"; then
+  echo "Failed to download the approved SlowDNS server binary."
+  rm -f "$SLOWDNS_DOWNLOAD"
+  exit 1
+fi
+if ! printf '%s  %s\n' "$SLOWDNS_SHA256" "$SLOWDNS_DOWNLOAD" | sha256sum -c -; then
+  echo "SlowDNS checksum mismatch; refusing to install the binary."
+  rm -f "$SLOWDNS_DOWNLOAD"
+  exit 1
+fi
+install -m 700 "$SLOWDNS_DOWNLOAD" /etc/slowdns/sldns-server
+rm -f "$SLOWDNS_DOWNLOAD"
 iptables -C INPUT -p udp --dport 53 -j ACCEPT 2>/dev/null || iptables -I INPUT -p udp --dport 53 -j ACCEPT
 cat > /etc/systemd/system/server-sldns.service << END
 [Unit]
@@ -2834,7 +2851,7 @@ WantedBy=multi-user.target
 EOF
 systemctl daemon-reload; systemctl enable hysteria-server.service; systemctl start hysteria-server.service
 
-# === HYSTERIA 2 (official core, separate from Hysteria 1) ===
+# === HYSTERIA 2 ===
 HYSTERIA2_VER="app/v2.9.3"
 case "$(uname -m)" in
   x86_64|amd64) HYSTERIA2_ASSET="hysteria-linux-amd64" ;;
